@@ -13,10 +13,12 @@ class ItemValidationTest(FunctionalTest):
 
         # The home page refreshes, and there is an error message saying
         # that list items cannot be blank
+        ## this is the page rendered with {"error":error} when there is a validation error
         error = self.browser.find_element_by_css_selector('.has-error')
         self.assertEqual(error.text, "You can't have an empty list item!")
 
         # She tries again with some text for the item, which now works
+        ## list_.delete() in views is why Get milk is #1
         self.browser.find_element_by_id('id_new_item').send_keys('Get milk \n')
         self.check_for_row_in_list_table('1: Get milk')
 

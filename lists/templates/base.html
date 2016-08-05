@@ -21,6 +21,7 @@
                         {% csrf_token %}
                         {% if error %}
                             <div class="form-group has-error">
+                                <!-- {{ error }} tag refers to item validation in new_list view -->
                                 <span class="help-block">{{ error }}</span>
                             </div>
                         {% endif %}

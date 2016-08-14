@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
     
 def home_page(request):
     '''
-    If request mthod = POST, create item in db with text from the 
+    If request method = POST, create item in db with text from the 
     value of key "item_text" in POST QuertDict. If method is not post,
     simply render the 'home.html' template with the request info
     '''

@@ -11,24 +11,20 @@ class HomePageTest(TestCase):
 
     def test_root_url_resolves_to_home_page_view(self):
         '''
-        resolve checks if the url '/' leads anywhere, and it's func attribute
-        is the view function that controls that url
+        instantiate resolve object, check it's .func attribute for the right
+        view 
         '''
         found = resolve('/')  
         self.assertEqual(found.func, home_page)  
     
     def test_home_page_returns_correct_html(self):
         '''
-        we check if two different values are equal here, the veiws.home_page's output
-        given an HttpRequest object as input, which is supposed to be home.html file. We
-        then compare this to the home.html file passed through rendered_to_string.
+        instantiate HttpRequest object, pass it through home_page view, check
+        response for correctly rendered home.html. Notice render_to_string and .decode()
+        both compile data to string format for comparison
         '''
         request = HttpRequest()  
         response = home_page(request)
-        # think about similarities here between render and render to string:
-        # render takes a temoplate and outs the html intp response.content,
-        # while render_to_string takes html in a template and turns it into
-        # a string so that the contents can be compared easily  
         expected_html = render_to_string('home.html')
         self.assertEqual(response.content.decode(), expected_html)
         
@@ -39,9 +35,9 @@ class ListViewTest(TestCase):
         
     def test_uses_list_template(self):
         '''
-        create List instance as list_, which will have automatically generated unique .id
-        attribute. Check that the template used under the url lists/list_.id matches our 
-        list.html template
+        create list object, which will have automatically generated list.id. Pass url
+        to client, which comes up with what a browser would see. Check this rendered 
+        template used our list.html template
         '''
         list_ = List.objects.create()
         response = self.client.get('/lists/%d/' % (list_.id))
@@ -50,8 +46,9 @@ class ListViewTest(TestCase):
 
     def test_displays_only_items_for_that_list(self):
         '''
-        create two item objects with diff list values, the response from views
-        if it has contains the right values and doesnt contain the wrong values
+        since items are assigned a list, we run create obect on two different lists, 
+        pass one list to client, check that the response contains items from
+        the right list instead of another
         '''
         correct_list = List.objects.create()
         Item.objects.create(text='itemey 1', list=correct_list)
@@ -69,8 +66,9 @@ class ListViewTest(TestCase):
     
     def test_passes_correct_list_to_template(self):
         '''
-        two lists are created, but only one is passed as post request to views, and response
-        is checked to see that it contains the one we passed and not the other
+        notice first what is passed to assertEqual: context attribute of response, and 
+        the list that was created and later used to create get request. this does not test
+        template's rendering of the list, but simply the response's context
         '''
         other_list = List.objects.create()
         correct_list = List.objects.create()

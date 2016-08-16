@@ -8,9 +8,9 @@ class ListAndItemModelTest(TestCase):
 
     def test_saving_and_retrieving_items(self):
         '''
-        store List() object in name list_, create two Item() objects with different .text
-        but the same lis_ object stored in attribute .list, then check if data stored in DB
-        actually matches what we want: two different .text values, and the same .list value
+        create and save instance of List() as list_, create Item() object with data, establish
+        its foreign key is list_, do it again with different item data but same foreign key, 
+        validate that data was passed with integrity and foregin keys are correct
         '''
         list_ = List()
         list_.save()
@@ -39,6 +39,9 @@ class ListAndItemModelTest(TestCase):
         self.assertEqual(second_saved_item.list, list_)
         
     def test_cannot_save_empty_list_items(self):
+        """
+        make sure empty list item raises validation
+        """
         list_ = List.objects.create()
         item = Item(list=list_, text='')
         with self.assertRaises(ValidationError):

@@ -8,9 +8,9 @@ from django.core.exceptions import ValidationError
     
 def home_page(request):
     '''
-    If request method = POST, create item in db with text from the 
-    value of key "item_text" in POST QuertDict. If method is not post,
-    simply render the 'home.html' template with the request info
+    reverses to "/", checks the request method, if POST uses db api command
+    and kwarg stored in POST form data QueryDict, redirects to our only list
+    as of now, or else returns home, rendered with request data
     '''
     if request.method == 'POST':
         Item.objects.create(text=request.POST['item_text'])
@@ -21,13 +21,10 @@ def home_page(request):
     
 def new_list(request):
     '''
-    When someone clicks on {{block form-action}}:
-    Create list, item object with data from post request. Turn off dango's
-    validation, try to save the item. If there is a validation error, delete
-    the saved instance and display appropriate error. Render home, pass dict with
-    "error":error to pass the error to the template. If exception not raised,
-    meaning itm is non empty, redirecti to lists/list.id, which url conf reads as
-    lists/(\d)/
+    reverses to /lists/new/ url, creates instances of object creation from POST
+    data. full_clean() turns of django's automatic list validation, then item is 
+    saved. If validation fails on save, we render home with a msg to the user
+    not to save empty lists. otherwise redirect to a url with the list_ id
     '''
     list_ = List.objects.create()
     item = Item.objects.create(text=request.POST['item_text'], list = list_)
@@ -43,10 +40,9 @@ def new_list(request):
     
 def view_list(request, list_id):
     '''
-    When the urlconf matches input url to lists/(/d+), the /d+ is stored in var
-    list_id, and we create an run object.get on an instance of list, with id=list_id,
-    and the name of the instace as list_. We return a rendered home page, with list_
-    passed as value under the 'list' key in a dict
+    reverses to /list/list_.id/ url. instantiate object list get with list.id
+    passed to it from url,
+    render list.html with context from list object
     '''
     list_ = List.objects.get(id=list_id)
     return render(request, 'list.html', {'list': list_})
@@ -54,11 +50,9 @@ def view_list(request, list_id):
 
 def add_item(request, list_id):
     '''
-    When list.html is rendered, and form_action link is clicked, the url lists/\d+/
-    add_item maps to this, which takes captured list_id, runs object.get with
-    captured data, and stores it in list_. We run item.objects.create with 
-    request.POST['item_text'] data, and associate it to list_. We redirect
-    to lists/\d/ url, which calls views.view_list
+    reverses to /lists/add_item/, instantiates list object git on list id
+    passed through urlconf, instantiates item object create with post form data,
+    redirects to lists/list_.id, which calls view_list
     '''
     list_ = List.objects.get(id=list_id)
     Item.objects.create(text=request.POST['item_text'], list=list_)

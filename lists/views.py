@@ -39,22 +39,12 @@ def new_list(request):
     
     
 def view_list(request, list_id):
-    '''
-    reverses to /list/list_.id/ url. instantiate object list get with list.id
-    passed to it from url,
-    render list.html with context from list object
-    '''
     list_ = List.objects.get(id=list_id)
+    if request.method == 'POST':
+        Item.objects.create(text=request.POST['item_text'], list=list_)
+        return redirect('/lists/%d/' % (list_.id,))
     return render(request, 'list.html', {'list': list_})
 
 
-def add_item(request, list_id):
-    '''
-    reverses to /lists/add_item/, instantiates list object git on list id
-    passed through urlconf, instantiates item object create with post form data,
-    redirects to lists/list_.id, which calls view_list
-    '''
-    list_ = List.objects.get(id=list_id)
-    Item.objects.create(text=request.POST['item_text'], list=list_)
-    return redirect('/lists/%d/' % (list_.id,))
+
     

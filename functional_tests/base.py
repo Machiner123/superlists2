@@ -10,19 +10,19 @@ class FunctionalTest(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls): 
         '''
-        This whole class method tries to circumvent our initial setUp() that uses the test server
-        to use a real server. If we want a real erver, we put it in a command line argument.
-        sys.argv is list of command line arguments passed to the script.
-        We look for 'liveserver = url', split it into arg = [['liveserver'], ['url']],
-        then store 'http://' + 'arg[1]' in cls.server_url
+        unittest has its own practice server, but we want to use a live server, so we
+        write command line argument "liveserver = url". If there is such a command,
+        we change server_url method of StaticLiveServerTestCase to 'http://' + 'url'.
+        If there is no command line liveserver=url, we refer to the next definition
+        of setUpClass in the method search tree using super, and use the class's
+        default server test. live_server_url is set by --liveserver
         ''' #1
         for arg in sys.argv:  #2
             if 'liveserver' in arg:  #arg will contain 'liveserver' = 'url'
                 #split it into a list=['liveserver', 'url'], with list[1] = 'url'
                 cls.server_url = 'http://' + arg.split('=')[1]  #4
-                return  # this makes it an if-else
-        super().setUpClass()  # this does not call the method within the method, this makes
-                              # the method callable by other subclasses
+                return  
+        super().setUpClass()  
         cls.server_url = cls.live_server_url
 
     @classmethod

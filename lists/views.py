@@ -8,16 +8,20 @@ def home_page(request):
 
 
 def new_list(request):
-    list_ = List.objects.create()
-    item = Item(text=request.POST['text'], list=list_)
-    try:
-        item.full_clean()
-        item.save()
-    except ValidationError:
-        list_.delete()
-        error = "You can't have an empty list item"
-        return render(request, 'home.html', {"error": error})
-    return redirect(list_)
+    '''
+    Pass POST dict to ItemForm constructor; only talk to model if data is valid;
+    if valid create lis instance and object with data stored in POST dict under 
+    key 'text', redirect to url named view_list in lists.urls, stored in get_absolute_url
+    attr in list_.; else render home again, pass it the form  
+    '''
+    form = ItemForm(data = request.POST)
+    if form.is_valid():
+        list_=List.objects.create()
+        Item.objects.create(text=request.POST['text'], list=list_)
+        return redirect(list_)
+    else:
+        return render(request, 'home.html', {"form": form})
+    
 
 
 def view_list(request, list_id):
@@ -33,7 +37,9 @@ def view_list(request, list_id):
             return redirect(list_)
         except ValidationError:
             error = "You can't have an empty list item"
-
-    return render(request, 'list.html', {'list': list_, 'error': error})
+    form = ItemForm()
+    return render(request, 'list.html', {'list': list_, 
+                                        'form': form, 
+                                        'error': error})
 
 

@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from lists.models import Item, List
 from lists.views import home_page
 from django.utils.html import escape
-from lists.forms import ItemForm
+from lists.forms import ItemForm, EMPTY_ITEM_ERROR
 
 
 class HomePageTest(TestCase):

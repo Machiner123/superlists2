@@ -4,7 +4,11 @@ from django.core.urlresolvers import reverse
 
 
 class List(models.Model):
+  
     def get_absolute_url(self):
+        '''
+        instance.get_abuslute_url() and redurect(instance) will return url named vew_list
+        '''
         return reverse('view_list', args=[self.id])
 
     

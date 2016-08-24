@@ -9,14 +9,15 @@ def home_page(request):
 
 def new_list(request):
     '''
-    Pass POST dict to ItemForm constructor; only talk to model if data is valid;
-    if valid create lis instance and object with data stored in POST dict under 
-    key 'text', redirect to url named view_list in lists.urls, stored in get_absolute_url
-    attr in list_.; else render home again, pass it the form  
+    URLconf calls this function when data is inputed to form on home page.
+    Instantiate and save ItemForm object, with data taken from request.POST.
+    If is_valid returns True, use ItemForm's modified save(), return to 
+    list_'s get_absolute_url attribute (calls view_list). If is_valid() returns
+    False, return to homepage and pass the homepage template our form object
     '''
     form = ItemForm(data = request.POST)
     if form.is_valid():
-        list_=List.objects.create()
+        list_ = List.objects.create()
         form.save(for_list=list_)
         return redirect(list_)
     else:

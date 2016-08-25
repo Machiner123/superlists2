@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>QUnit Example</title>
-  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.0.1.css">
+    <meta charset="utf-8">
+    <title>Javascript tests</title>
+    <link rel="stylesheet" href="qunit.css">
 </head>
-<body>
-  <div id="qunit"></div>
-  <div id="qunit-fixture"></div>
-    <form>
-        <input name = "text"/>
-        <div class = "has-error">Error Text</div>
-    </form>
-    
-    <script src = "http://code.jquery.com/jquery.min.js"></script>
-    <script src = "qunit.s"></script>
-    <script>
-test("smoke test", function () {
-    equal($('.has-error').is(':visible'), true); 
-    $('.has-error').hide(); 
-    equal($('.has-error').is(':visible'), false); 
-});
 
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+    <form> 
+        <input name="text" />
+        <div class="has-error">Error text</div>
+    </form>
+    </div>
+    
+    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="qunit.js"></script>
+    <script src="../lists.js"></script>
+    <script>
+test("errors should be hidden on keypress", function () {
+    $('input').trigger('keypress'); 
+    equal($('.has-error').is(':visible'), false);
+});
+test("errors not be hidden unless there is a keypress", function () {
+    equal($('.has-error').is(':visible'), true);
+});
     </script>
-  <script src="https://code.jquery.com/qunit/qunit-2.0.1.js"></script>
-  <script src="tests.js"></script>
+
 </body>
 </html>

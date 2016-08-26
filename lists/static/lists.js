@@ -1,6 +1,12 @@
 jQuery(document).ready(function () {
-    $('input').on('keypress', function () { //1
+    $("input[name='text']").keypress(function () { 
         $('.has-error').hide();
     });
 });
-
+/*
+jQuery(document).ready(function () {
+    $('input').on('keypress', '#texties', function(){
+        $('.has-error').hide();
+    });
+});
+*/

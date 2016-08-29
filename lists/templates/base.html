@@ -54,20 +54,27 @@ $(document).ready(function() {
 
 var loginLink = document.getElementById('login');
 if (loginLink) {
+// navigator.id is key object that can create a request
+// object we can use to help authenticate a user's email
   loginLink.onclick = function() { navigator.id.request(); };
 }
 
 var logoutLink = document.getElementById('logout');
+// if (a) { a.onclick = func...  acts if
+// a returns true false, which depends on if/else above
 if (logoutLink) {
   logoutLink.onclick = function() { navigator.id.logout(); };
 }
-
+// null is not undefined object, it is specifaclly absence of object
+// notice assignment in js is something like findElement('a'_.val()
 var currentUser = '{{ user.email }}' || null;
 var csrf_token = '{{ csrf_token }}';
 console.log(currentUser);
 
 navigator.id.watch({
   loggedInUser: currentUser,
+  // assertian is an object combining a large site's authentication
+  //certificate with the domain of this website
   onlogin: function(assertion) {
     $.post('/accounts/login', {assertion: assertion, csrfmiddlewaretoken: csrf_token})
     .done(function() { window.location.reload(); })

@@ -9,72 +9,65 @@
     <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
+<div class="container">
     
-        <div class="navbar">
-            {% if user.email %}
-                <p>Logged in as {{ user.email}}</p>
-                <p><a id="logout" href="{% url 'logout' %}">Sign out</a></p>
-            {% else %}
-                <a href="#" id="login">Sign in</a>
-            {% endif %}
-            <p>User: {{user}}</p>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3 jumbotron">
-                <div class="text-center">
-                    <h1>{% block header_text%} {% endblock %}</h1>
-                    <form method=POST action= "{% block form_action %}{% endblock %}" >
-                        {{ form.text }}
-                        {% csrf_token %}
-                        <!-- form.errors is populated with errors for the form -->
-                        {% if form.errors %}
-                            <div class="form-group has-error">
-                                <!-- {{ form.text.errors }} ItemForm's errors for text fields -->
-                                <div class="help-block">{{ form.text.errors }}</div>
-                            </div>
-                        {% endif %}
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                {% block table %}
-                {% endblock %}
+    <div class="navbar">
+        {% if user.email %}
+            <p>Logged in as {{ user.email}}</p>
+            <p><a id="logout" href="{% url 'logout' %}">Sign out</a></p>
+        {% else %}
+            <a href="#" id="login">Sign in</a>
+        {% endif %}
+        <p>User: {{user}}</p>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3 jumbotron">
+            <div class="text-center">
+                <h1>{% block header_text%} {% endblock %}</h1>
+                <form method=POST action= "{% block form_action %}{% endblock %}" >
+                    {{ form.text }}
+                    {% csrf_token %}
+                    <!-- form.errors is populated with errors for the form -->
+                    {% if form.errors %}
+                        <div class="form-group has-error">
+                            <!-- {{ form.text.errors }} ItemForm's errors for text fields -->
+                            <div class="help-block">{{ form.text.errors }}</div>
+                         </div>
+                    {% endif %}
+                </form>
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            {% block table %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
 
 <script src="http://code.jquery.com/jquery.min.js"></script>
-<script src="/static/lists.js"></script>
+<script src="/static/list.js"></script>
 <script src="https://login.persona.org/include.js"></script>
 <script>
 $(document).ready(function() {
 
 var loginLink = document.getElementById('login');
 if (loginLink) {
-// navigator.id is key object that can create a request
-// object we can use to help authenticate a user's email
   loginLink.onclick = function() { navigator.id.request(); };
 }
 
 var logoutLink = document.getElementById('logout');
-// if (a) { a.onclick = func...  acts if
-// a returns true false, which depends on if/else above
 if (logoutLink) {
   logoutLink.onclick = function() { navigator.id.logout(); };
 }
-// null is not undefined object, it is specifaclly absence of object
-// notice assignment in js is something like findElement('a'_.val()
+
 var currentUser = '{{ user.email }}' || null;
 var csrf_token = '{{ csrf_token }}';
 console.log(currentUser);
 
 navigator.id.watch({
   loggedInUser: currentUser,
-  // assertian is an object combining a large site's authentication
-  //certificate with the domain of this website
   onlogin: function(assertion) {
     $.post('/accounts/login', {assertion: assertion, csrfmiddlewaretoken: csrf_token})
     .done(function() { window.location.reload(); })
@@ -85,5 +78,9 @@ navigator.id.watch({
     .always(function() { window.location.reload(); });
   }
 });
+
+});
+</script>
+
 </body>
 </html>

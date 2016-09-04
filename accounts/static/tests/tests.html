@@ -43,7 +43,7 @@ test("initialize binds sign in button to navigator.id.request", function () {
 var user, token, urls, mockNavigator, requests, xhr; 
 module("navigator.id.watch tests", {
     setup: function () {
-        user = 'current user'; //2
+        user = 'current user'; 
         token = 'csrf token';
         urls = { login: 'login url', logout: 'logout url' };
         mockNavigator = {
@@ -51,48 +51,67 @@ module("navigator.id.watch tests", {
                 watch: sinon.mock()
             }
         };
-        xhr = sinon.useFakeXMLHttpRequest(); //3
-        requests = []; //4
-        xhr.onCreate = function (request) { requests.push(request); }; //5
+        xhr = sinon.useFakeXMLHttpRequest(); // Fake request object that does't really talk to server
+        requests = []; // Storing requests in array to be looked at later
+        xhr.onCreate = function (request) { requests.push(request); }; 
     },
     teardown: function () {
-        mockNavigator.id.watch.reset(); //6
-        xhr.restore(); //7
+        mockNavigator.id.watch.reset(); // Clear .watch attributes to be used in next test
+        xhr.restore(); // Also restores XMLHttpRequest object
     }
 });
 
 test("initialize calls navigator.id.watch", function () {
-    var user = 'current user';
-    var token = 'csrf token';
-    var urls = {login: 'login url', logout: 'logout url'};
-    var mockNavigator = {
-        id: {
-            watch: sinon.mock() //1
-        }
-    };
-
     Superlists.Accounts.initialize(mockNavigator, user, token, urls);
-
-    equal(
-        mockNavigator.id.watch.calledOnce, //2
-        true,
-        'check watch function called'
-    );
+    equal(mockNavigator.id.watch.calledOnce, true, 'check watch function called');
 });
 
-test("watch sees current user", function () {
-    var user = 'current user';
-    var token = 'csrf token';
-    var urls = {login: 'login url', logout: 'logout url'};
-    var mockNavigator = {
-        id: {
-            watch: sinon.mock()
-        }
-    };
 
+test("watch sees current user", function () { // Checks arguments passed to watch for our user
     Superlists.Accounts.initialize(mockNavigator, user, token, urls);
     var watchCallArgs = mockNavigator.id.watch.firstCall.args[0];
     equal(watchCallArgs.loggedInUser, user, 'check user');
+});
+
+test("onlogin does ajax post to login url", function () {
+    Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+    var onloginCallback = mockNavigator.id.watch.firstCall.args[0].onlogin;
+    onloginCallback();
+    equal(requests.length, 1, 'check ajax request');
+    equal(requests[0].method, 'POST');
+    equal(requests[0].url, urls.login, 'check url');
+});
+
+test("onlogin sends assertion with csrf token", function () {
+    Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+    var onloginCallback = mockNavigator.id.watch.firstCall.args[0].onlogin;
+    var assertion = 'browser-id assertion';
+    onloginCallback(assertion);
+    equal(
+        requests[0].requestBody,
+        $.param({ assertion: assertion, csrfmiddlewaretoken: token }), //4
+        'check POST data'
+    );
+});
+
+test("onlogout is just a placeholder", function () {
+    Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+    var onlogoutCallback = mockNavigator.id.watch.firstCall.args[0].onlogout;
+    equal(typeof onlogoutCallback, "function", "onlogout should be a function");
+});
+
+test("onlogin post failure should do navigator.id.logout ", function () {
+    mockNavigator.id.logout = sinon.mock(); 
+    Superlists.Accounts.initialize(mockNavigator, user, token, urls);
+    var onloginCallback = mockNavigator.id.watch.firstCall.args[0].onlogin;
+    var server = sinon.fakeServer.create(); // Fakeserver is fakeXMLHttpRequest server for ajax
+    server.respondWith([403, {}, "permission denied"]); // Simulares unauthorized user
+
+    onloginCallback();
+    equal(mockNavigator.id.logout.called, false, 'should not logout yet');
+
+    server.respond(); // Instruction to server to send the response
+    equal(mockNavigator.id.logout.called, true, 'should call logout');
 });
 
     </script>

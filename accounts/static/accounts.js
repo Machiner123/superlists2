@@ -4,7 +4,17 @@ var initialize = function (navigator, user, token, urls) {
     });
 
     navigator.id.watch({
-        loggedInUser: user
+        loggedInUser: user,
+        onlogin: function (assertion) {
+            $.post(
+                urls.login,
+                { assertion: assertion, csrfmiddlewaretoken: token }
+            )
+                .done(function () { window.location.reload(); })
+                .fail(function () { navigator.id.logout(); }); // These are atributes of $.post
+        },
+        onlogout: function () {}
+        
     });
 };
 
@@ -14,3 +24,4 @@ window.Superlists = {
         initialize: initialize
     }
 };
+

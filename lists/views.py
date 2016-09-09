@@ -7,6 +7,7 @@ def home_page(request):
     return render(request, 'home.html', {'form': ItemForm()})
 
 
+
 def new_list(request):
     '''
     URLconf calls this function when data is inputed to form on home page.

@@ -1,13 +1,13 @@
-
 from unittest.mock import patch
+from django.conf import settings
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from accounts.authentication import (
-    PERSONA_VERIFY_URL, DOMAIN, PersonaAuthenticationBackend
-)
 
+from accounts.authentication import (
+    PERSONA_VERIFY_URL, PersonaAuthenticationBackend
+)
 
 @patch('accounts.authentication.requests.post')
 class AuthenticateTest(TestCase):
@@ -34,7 +34,7 @@ class AuthenticateTest(TestCase):
         self.backend.authenticate('an assertion')
         mock_post.assert_called_once_with(
             PERSONA_VERIFY_URL,
-            data={'assertion': 'an assertion', 'audience': DOMAIN}
+            data={'assertion': 'an assertion', 'audience': settings.DOMAIN}
         )
         
 

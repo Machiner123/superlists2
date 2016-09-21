@@ -25,7 +25,7 @@ SECRET_KEY = '0w$gy@3-h0i2#s1%@tba-ap@m6l(8vo6w+ij5fz-4fhzb9e4_c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-DOMAIN="LOCALHOST"
+DOMAIN = "localhost"
 
 ALLOWED_HOSTS = [DOMAIN]
 

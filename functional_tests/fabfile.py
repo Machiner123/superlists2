@@ -1,6 +1,5 @@
 from fabric.api import env, run
 
-env.use_ssh_config = True
 
 def _get_base_folder(host):
     return '~/sites/' + host

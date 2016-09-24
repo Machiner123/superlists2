@@ -27,7 +27,7 @@ class LoginTest(FunctionalTest):
         ## Use mockmyid.com for test email
         self.browser.find_element_by_id(
             'authentication_email'  # 2
-        ).send_keys('edith@mockmyid.com') #3
+        ).send_keys(TEST_EMAIL) #3
         self.browser.find_element_by_tag_name('button').click()
 
         # The Persona window closes

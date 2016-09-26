@@ -1,7 +1,7 @@
 from fabric.api import env, run
 
 env.use_ssh_config = True
-env.host = 'stag.igoratakhanov.com'
+#env.host = 'stag.igoratakhanov.com'
 
 def print_host():
     print env.host

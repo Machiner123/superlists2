@@ -14,7 +14,10 @@
         <nav class="navbar navbar-defualt" role="navigation">
             <a class="navbar-brand" href="/">Superlists</a>
             {% if user.email %}
-            <a class="btn navbar-btn navbar-right" id="id_logout" href="{% url 'logout' %}">Log out</a>
+                <ul class="nav navbar-nav">
+                    <li><a href="#">My lists</a></li>
+                </ul>
+                <a class="btn navbar-btn navbar-right" id="id_logout" href="{% url 'logout' %}">Log out</a>
 
                 <span class="navbar-text navbar-right">Logged in as {{ user.email }}</span>
             {% else %}
@@ -25,18 +28,20 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3 jumbotron">
                 <div class="text-center">
-                    <h1>{% block header_text%} {% endblock %}</h1>
-                    <form method=POST action= "{% block form_action %}{% endblock %}" >
+                    <h1>{% block header_text %}{% endblock %}</h1>
+
+                    {% block list_form %}
+                    <form method="POST" action="{% block form_action %}{% endblock %}">
                         {{ form.text }}
                         {% csrf_token %}
-                        <!-- form.errors is populated with errors for the form -->
                         {% if form.errors %}
                             <div class="form-group has-error">
-                                <!-- {{ form.text.errors }} ItemForm's errors for text fields -->
                                 <div class="help-block">{{ form.text.errors }}</div>
                             </div>
                         {% endif %}
                     </form>
+                    {% endblock %}
+
                 </div>
             </div>
         </div>
@@ -46,6 +51,14 @@
                 {% endblock %}
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                {% block extra_content %}
+                {% endblock %}
+            </div>
+        </div>
+    
     </div>
 
 <script src="http://code.jquery.com/jquery.min.js"></script>

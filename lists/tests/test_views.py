@@ -207,7 +207,6 @@ class NewListViewIntegratedTest(TestCase):
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)  
 
-    @unittest.skip
     def test_list_owner_is_saved_if_user_is_authenticated(self):
         request = HttpRequest()
         request.user = User.objects.create(email='a@b.com')
@@ -244,7 +243,7 @@ class NewListViewUnitTest(unittest.TestCase):
 
     def test_passes_POST_data_to_NewListForm(self, mockNewListForm):
         new_list2(self.request)
-        mockNewListForm.assert_called_once_with(data=self.request.POST)
+        mockNewListForm.assert_called_once_with(data=self.request.POST) 
 
 
     def test_saves_form_with_owner_if_form_valid(self, mockNewListForm):
@@ -252,6 +251,12 @@ class NewListViewUnitTest(unittest.TestCase):
         mock_form.is_valid.return_value = True
         new_list2(self.request)
         mock_form.save.assert_called_once_with(owner=self.request.user)
+
+    def test_does_not_save_if_form_invalid(self, mockNewListForm):
+        mock_form = mockNewListForm.return_value
+        mock_form.is_valid.return_value = False
+        new_list2(self.request)
+        self.assertFalse(mock_form.save.called)
 
     @patch('lists.views.redirect')  #1
     def test_redirects_to_form_returned_object_if_form_valid(
@@ -278,3 +283,5 @@ class NewListViewUnitTest(unittest.TestCase):
         mock_render.assert_called_once_with(
             self.request, 'home.html', {'form': mock_form}
         )
+
+    

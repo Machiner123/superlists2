@@ -55,8 +55,8 @@ class MyListsTest(FunctionalTest):
         #self.assertEqual(self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]/@href"),
         #        first_list_url)
         
-        self.browser.find_element_by_xpath("//a[@href='" + self.href_of_url(first_list_url) + "']").click()
-        #self.browser.find_element_by_partial_link_text('Reticulate splines').click()
+        #self.browser.find_element_by_xpath("//a[@href='" + self.href_of_url(first_list_url) + "']").click()
+        self.browser.find_element_by_partial_link_text('Reticulate splines').click()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, first_list_url)
         )
@@ -70,7 +70,9 @@ class MyListsTest(FunctionalTest):
         #self.browser.find_element_by_link_text('My lists').click()
         self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]").click()
         #self.browser.find_element_by_link_text('Click cows').click()
-        self.assertEqual(self.browser.current_url, second_list_url)
+        self.wait_for(
+            lambda: self.assertEqual(self.browser.current_url, second_list_url)
+        )
 
         # She logs out.  The "My lists" option disappears
         self.browser.find_element_by_id('id_logout').click()

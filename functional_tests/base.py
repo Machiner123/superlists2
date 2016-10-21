@@ -8,10 +8,8 @@ from .server_tools import reset_database
 import time
 from selenium.common.exceptions import WebDriverException
 
-SCREEN_DUMP_LOCATION = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'screendumps'
-)
-DEFAULT_WAIT = 5
+
+DEFAULT_WAIT = 15
 SCREEN_DUMP_LOCATION = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'screendumps'
 )

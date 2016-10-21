@@ -65,7 +65,9 @@ class MyListsTest(FunctionalTest):
         #        first_list_url)
         
         #self.browser.find_element_by_xpath("//a[@href='" + self.href_of_url(first_list_url) + "']").click()
-        self.browser.find_element_by_partial_link_text('Reticulate splines').click()
+        element2 = self.browser.find_element_by_partial_link_text('Reticulate splines')
+        sleep(5)
+        action.click(element2).perform()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, first_list_url)
         )

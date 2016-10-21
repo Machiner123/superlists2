@@ -2,6 +2,10 @@ from django.conf import settings
 from .base import FunctionalTest
 from .server_tools import create_session_on_server
 from .management.commands.create_session import create_pre_authenticated_session
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+
 
 
 class MyListsTest(FunctionalTest):
@@ -24,16 +28,25 @@ class MyListsTest(FunctionalTest):
 
     def test_logged_in_users_lists_are_saved_as_my_lists(self):
         # Edith is a logged-in user
-        self.create_pre_authenticated_session('edith@example.com')
+        edith_email = 'edith@example.com'
+        edith_user_url= '/' + 'lists' + '/' + 'users' + '/' + edith_email + '/'
+        self.create_pre_authenticated_session(edith_email)
 
         # She goes to the home page and starts a list
         self.browser.get(self.server_url)
         self.get_item_input_box().send_keys('Reticulate splines\n')
         self.get_item_input_box().send_keys('Immanentize eschaton\n')
         first_list_url = self.browser.current_url
+        #first_url_parts = first_list_url.split('/')
+        #first_href_value = '/' + first_url_parts.split(-3) + '/' + 
+        #    first_url_parts.split(-2) + '/'
 
         # She notices a "My lists" link, for the first time.
-        self.browser.find_element_by_xpath("//a[contains(text(), 'My lists')]").click()
+        
+
+        self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']").click()
+
+        #self.browser.find_element_by_xpath("//a[contains(text(), 'My lists')]").click()
 
         # She sees that her list is in there, named according to its
         # first list item
@@ -42,11 +55,11 @@ class MyListsTest(FunctionalTest):
         #self.assertEqual(self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]/@href"),
         #        first_list_url)
         
-        self.browser.find_element_by_xpath("//a[@href='" + first_list_url + "']").click()
+        self.browser.find_element_by_xpath("//a[@href='" + self.href_of_url(first_list_url) + "']").click()
         #self.browser.find_element_by_partial_link_text('Reticulate splines').click()
-        #self.wait_for(
-        #    lambda: self.assertEqual(self.browser.current_url, first_list_url)
-        #)
+        self.wait_for(
+            lambda: self.assertEqual(self.browser.current_url, first_list_url)
+        )
         # She decides to start another list, just to see
         self.browser.get(self.server_url)
         self.get_item_input_box().send_keys('Click cows\n')

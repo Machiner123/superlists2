@@ -127,3 +127,7 @@ class FunctionalTest(StaticLiveServerTestCase):
                 time.sleep(0.1)
         # one more try, which will raise any errors if they are outstanding
         return function_with_assertion()
+
+    def href_of_url(self, url):
+        url_parts = url.split('/')
+        return '/' + url_parts[-3] + '/' + url_parts[-2] + '/'

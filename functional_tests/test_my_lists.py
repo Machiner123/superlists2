@@ -1,3 +1,4 @@
+from selenium.webdriver.common.action_chains import ActionChains
 from django.conf import settings
 from .base import FunctionalTest
 from .server_tools import create_session_on_server
@@ -5,6 +6,8 @@ from .management.commands.create_session import create_pre_authenticated_session
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
+from selenium import webdriver
+from time import sleep
 
 
 
@@ -42,9 +45,15 @@ class MyListsTest(FunctionalTest):
         #    first_url_parts.split(-2) + '/'
 
         # She notices a "My lists" link, for the first time.
-        
+        element1 = self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']")
 
-        self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']").click()
+        action = ActionChains(self.browser)
+    
+        sleep(5)
+        action.click(element1).perform()
+
+
+        #self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']").click()
 
         #self.browser.find_element_by_xpath("//a[contains(text(), 'My lists')]").click()
 
@@ -68,7 +77,7 @@ class MyListsTest(FunctionalTest):
         # Under "my lists", her new list appears
         self.browser.find_element_by_xpath("//a[contains(text(), 'My lists')]").click()
         #self.browser.find_element_by_link_text('My lists').click()
-        self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]").click()
+        #self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]").click()
         #self.browser.find_element_by_link_text('Click cows').click()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, second_list_url)

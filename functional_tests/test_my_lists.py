@@ -67,12 +67,12 @@ class MyListsTest(FunctionalTest):
         #self.browser.find_element_by_xpath("//a[@href='" + self.href_of_url(first_list_url) + "']").click()
         #element2 = self.browser.find_element_by_link_text('Reticulate splines')
         #element2 = self.browser.find_element_by_xpath("//a[@href='" + self.href_of_url(first_list_url) + "']")
-        sleep(15)
-        element2 = self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]")
+        #sleep(15)
+        element1 = self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]")
 
         sleep(5)
         #action.click(element2).perform()
-        click = action.click(element2)
+        click = action.click(element1)
         sleep(5)
         click.perform()
         self.wait_for(

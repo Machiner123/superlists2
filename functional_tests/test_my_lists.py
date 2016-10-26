@@ -68,13 +68,14 @@ class MyListsTest(FunctionalTest):
         #element2 = self.browser.find_element_by_link_text('Reticulate splines')
         #element2 = self.browser.find_element_by_xpath("//a[@href='" + self.href_of_url(first_list_url) + "']")
         #sleep(15)
-        element1 = self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]")
+        #element2 = self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]")
 
-        sleep(5)
+        #sleep(5)
         #action.click(element2).perform()
-        click = action.click(element1)
-        sleep(5)
-        click.perform()
+        #click = action.click(element2)
+        #click.perform()
+        
+        element2 = WebDriverWait(self.browser, 10).until(EC.presence_of_element(By.XPATH, "//a[contains(text(), 'Reticulate splines')]" ))
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, first_list_url)
         )

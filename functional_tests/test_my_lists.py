@@ -75,7 +75,9 @@ class MyListsTest(FunctionalTest):
         #click = action.click(element2)
         #click.perform()
         
-        element2 = WebDriverWait(self.browser, 10).until(EC.presence_of_element(By.XPATH, "//a[contains(text(), 'Reticulate splines')]" ))
+        wait = WebDriverWait(self.browser, 10)
+        element2 = wait.until(EC.element_to_be_clickable((By.xpath(("//a[contains(text(), 'Reticulate splines')]"))))
+        action.click(element2).perform()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, first_list_url)
         )

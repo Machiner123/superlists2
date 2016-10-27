@@ -102,8 +102,13 @@ class MyListsTest(FunctionalTest):
         #sleep(5)
         action.click(element1).perform()
         #self.browser.find_element_by_link_text('My lists').click()
-        
-        self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]").click()
+        element1 = self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]")
+
+        action = ActionChains(self.browser)
+    
+        #sleep(5)
+        action.click(element1).perform()
+        #self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]").click()
         #self.browser.find_element_by_link_text('Click cows').click()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, second_list_url)

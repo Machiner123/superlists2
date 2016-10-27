@@ -99,7 +99,7 @@ class MyListsTest(FunctionalTest):
 
         action = ActionChains(self.browser)
     
-        #sleep(5)
+        sleep(5)
         action.click(element1).perform()
         #self.browser.find_element_by_link_text('My lists').click()
         element1 = self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]")

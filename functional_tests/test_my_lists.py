@@ -119,7 +119,7 @@ class MyListsTest(FunctionalTest):
 
         action = ActionChains(self.browser)
     
-        #sleep(5)
+        sleep(5)
         action.click(element1).perform()
         #self.browser.find_element_by_id('id_logout').click()
         self.assertEqual(

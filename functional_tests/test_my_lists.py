@@ -110,7 +110,13 @@ class MyListsTest(FunctionalTest):
         )
 
         # She logs out.  The "My lists" option disappears
-        self.browser.find_element_by_id('id_logout').click()
+        element1 = self.browser.find_element_by_xpath("//a[contains(text(), 'Log out')]")
+
+        action = ActionChains(self.browser)
+    
+        #sleep(5)
+        action.click(element1).perform()
+        #self.browser.find_element_by_id('id_logout').click()
         self.assertEqual(
             self.browser.find_elements_by_link_text('My lists'),
             []

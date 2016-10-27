@@ -94,9 +94,16 @@ class MyListsTest(FunctionalTest):
         second_list_url = self.browser.current_url
 
         # Under "my lists", her new list appears
-        self.browser.find_element_by_xpath("//a[contains(text(), 'My lists')]").click()
+        #self.browser.find_element_by_xpath("//a[contains(text(), 'My lists')]").click()
+        element1 = self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']")
+
+        action = ActionChains(self.browser)
+    
+        #sleep(5)
+        action.click(element1).perform()
         #self.browser.find_element_by_link_text('My lists').click()
-        #self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]").click()
+        
+        self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]").click()
         #self.browser.find_element_by_link_text('Click cows').click()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, second_list_url)

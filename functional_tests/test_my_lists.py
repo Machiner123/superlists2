@@ -3,10 +3,7 @@ from django.conf import settings
 from .base import FunctionalTest
 from .server_tools import create_session_on_server
 from .management.commands.create_session import create_pre_authenticated_session
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
-from selenium import webdriver
+#from selenium import webdriver
 from time import sleep
 
 
@@ -40,87 +37,50 @@ class MyListsTest(FunctionalTest):
         self.get_item_input_box().send_keys('Reticulate splines\n')
         self.get_item_input_box().send_keys('Immanentize eschaton\n')
         first_list_url = self.browser.current_url
-        #first_url_parts = first_list_url.split('/')
-        #first_href_value = '/' + first_url_parts.split(-3) + '/' + 
-        #    first_url_parts.split(-2) + '/'
 
         # She notices a "My lists" link, for the first time.
-        element1 = self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']")
-
+        element = self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']")
         action = ActionChains(self.browser)
-    
         sleep(5)
-        action.click(element1).perform()
+        action.click(element).perform()
 
 
-        #self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']").click()
-
-        #self.browser.find_element_by_xpath("//a[contains(text(), 'My lists')]").click()
-
-        # She sees that her list is in there, named according to its
-        # first list item
-        # She sees that her list is in there, named according to its
-        # first list item
-        #self.assertEqual(self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]/@href"),
-        #        first_list_url)
-        
-        #self.browser.find_element_by_xpath("//a[@href='" + self.href_of_url(first_list_url) + "']").click()
-        #element2 = self.browser.find_element_by_link_text('Reticulate splines')
-        #element2 = self.browser.find_element_by_xpath("//a[@href='" + self.href_of_url(first_list_url) + "']")
-        #sleep(15)
-        #element2 = self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]")
-
-        #sleep(5)
-        #action.click(element2).perform()
-        #click = action.click(element2)
-        #click.perform()
-        
-        #wait = WebDriverWait(self.browser, 10)
-        #element2 = wait.until(EC.element_to_be_clickable((By.xpath(("//a[contains(text(), 'Reticulate splines')]"))))
-        #action = ActionChains(self.browser)
-        #action.click(element2).perform()
-        element1 = self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]")
-
+        # she sees that her list is named according to its first line 
+        element = self.browser.find_element_by_xpath("//a[contains(text(), 'Reticulate splines')]")
         action = ActionChains(self.browser)
-    
         sleep(5)
-        action.click(element1).perform()
+        action.click(element).perform()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, first_list_url)
         )
+       
+
         # She decides to start another list, just to see
         self.browser.get(self.server_url)
         self.get_item_input_box().send_keys('Click cows\n')
         second_list_url = self.browser.current_url
 
-        # Under "my lists", her new list appears
-        #self.browser.find_element_by_xpath("//a[contains(text(), 'My lists')]").click()
-        element1 = self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']")
-
+        
+        # She goes back to her lists page to see if the second one is there
+        element = self.browser.find_element_by_xpath("//a[@href='" + edith_user_url + "']")
         action = ActionChains(self.browser)
-    
         sleep(5)
-        action.click(element1).perform()
-        #self.browser.find_element_by_link_text('My lists').click()
-        element1 = self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]")
-
+        action.click(element).perform()
+        
+        # SHe clicks on it and checks the url of the new list
+        element = self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]")
         action = ActionChains(self.browser)
-    
         sleep(5)
-        action.click(element1).perform()
-        #self.browser.find_element_by_xpath("//a[contains(text(), 'Click cows')]").click()
-        #self.browser.find_element_by_link_text('Click cows').click()
+        action.click(element).perform()
         self.wait_for(
             lambda: self.assertEqual(self.browser.current_url, second_list_url)
         )
 
         # She logs out.  The "My lists" option disappears
-        element1 = self.browser.find_element_by_xpath("//a[contains(text(), 'Log out')]")
-
+        element = self.browser.find_element_by_xpath("//a[contains(text(), 'Log out')]")
         action = ActionChains(self.browser)
-    
         sleep(5)
-        action.click(element1).perform()
+        action.click(element).perform()
         #self.browser.find_element_by_id('id_logout').click()
         self.assertEqual(
             self.browser.find_elements_by_link_text('My lists'),

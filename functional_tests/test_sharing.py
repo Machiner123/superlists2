@@ -29,7 +29,7 @@ class SharingTest(FunctionalTest):
         # Edith goes to the home page and starts a list
         self.browser = edith_browser
         #list_page = HomePage(self).start_new_list('Get help')
-        self.get_item_input_box().send_keys('Get help\n')
+        list_page = HomePage(self).start_new_list('Get help')
 
         # # She notices a "Share this list" option
         # self.wait_for(
